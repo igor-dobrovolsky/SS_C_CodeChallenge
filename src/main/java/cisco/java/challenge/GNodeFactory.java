@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 public class GNodeFactory {
     public final static int ROOT_LEVEL = 0;
 
-    public static GNodeExt parse(String... lines) {
+    public static GNodeExt build(String... lines) {
         Map<String, Integer> indentPrefix2Level = new HashMap<>();
         Map<Integer, GNodeConcrete> currentNodesAtLevels = new HashMap<>();
 

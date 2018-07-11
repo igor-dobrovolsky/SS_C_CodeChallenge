@@ -2,28 +2,28 @@ package cisco.java.challenge;
 
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 public class GNodeFactoryTest {
 
     @Test
     public void emptyLinesListShouldBuildNullGNode() {
-        assertTrue(GNodeFactory.parse() == null);
+        assertTrue(GNodeFactory.build() == null);
     }
 
     @Test
     public void listOfSingleLineWithBlanksShouldBuildNullGNode() {
-        assertTrue(GNodeFactory.parse("   ") == null);
+        assertTrue(GNodeFactory.build("   ") == null);
     }
 
     @Test
     public void listOfMultipleLinesWithBlanksShouldBuildNullGNode() {
-        assertTrue(GNodeFactory.parse("   ", " ", "      ") == null);
+        assertTrue(GNodeFactory.build("   ", " ", "      ") == null);
     }
 
     @Test
     public void listOfSingleLineWithStringShouldBuildRootGNodeWithNoChildren() {
-        GNodeExt node = GNodeFactory.parse("A");
+        GNodeExt node = GNodeFactory.build("A");
         assertTrue(node != null);
         assertTrue(node.getName().equals("A"));
         assertTrue(node.isLeaf());
@@ -31,7 +31,7 @@ public class GNodeFactoryTest {
 
     @Test
     public void listOfNonEmptyAndEmptyLinesShouldBuildRootGNodeWithNoChildren() {
-        GNodeExt node = GNodeFactory.parse("  ",
+        GNodeExt node = GNodeFactory.build("  ",
                 "A",
                 "  ");
         assertTrue(node != null);
@@ -41,7 +41,7 @@ public class GNodeFactoryTest {
 
     @Test
     public void listOfLinesWithSingleIndentShouldBuildRootGNodeWithSingleChild() {
-        GNodeExt node = GNodeFactory.parse("  ",
+        GNodeExt node = GNodeFactory.build("  ",
                 "A",
                 " B");
         assertTrue(node != null);
@@ -67,7 +67,7 @@ public class GNodeFactoryTest {
                 new GNodeConcrete("D")
         );
 
-        GNodeExt node = GNodeFactory.parse("  ",
+        GNodeExt node = GNodeFactory.build("  ",
                 "A",
                 " B",
                 "  E",
