@@ -2,6 +2,7 @@ package cisco.java.challenge;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 class GNodeConcrete implements GNodeExt {
     private String name;
@@ -24,5 +25,22 @@ class GNodeConcrete implements GNodeExt {
 
     public void addChild(GNodeConcrete node) {
         nodes.add(node);
+    }
+
+    @Override
+    public boolean equals(Object anObject) {
+        if (super.equals(anObject)) {
+            return true;
+        }
+        if (anObject instanceof GNodeConcrete) {
+            GNodeConcrete other = (GNodeConcrete)anObject;
+            return name.equals(other.name) && nodes.equals(other.nodes);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, nodes);
     }
 }

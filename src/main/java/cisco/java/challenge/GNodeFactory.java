@@ -12,26 +12,23 @@ public class GNodeFactory {
     public final static int ROOT_LEVEL = 0;
 
     public static GNodeExt parse(String... lines) {
-        Map<String, Integer> identPrefix2Level = new HashMap<>();
+        Map<String, Integer> indentPrefix2Level = new HashMap<>();
         Map<Integer, GNodeConcrete> currentNodesAtLevels = new HashMap<>();
-        int prevLevel = ROOT_LEVEL;
 
         for (String line : lines) {
-            Pair<String, String> identAndName = parseIdentAndName(line);
+            Pair<String, String> indentAndName = parseIdentAndName(line);
 
-            if(identAndName == null) continue; //skipping blank line
+            if (indentAndName == null) continue; //skipping blank line
 
-            String ident = identAndName.getLeft();
-            String name = identAndName.getRight();
+            String indent = indentAndName.getLeft();
+            String name = indentAndName.getRight();
 
-            int identLevel = matchLevel(identPrefix2Level, ident);
-            if (identLevel == prevLevel)
-                currentNodesAtLevels.put(identLevel, new GNodeConcrete(name));
-            else {
-                currentNodesAtLevels.get(identLevel - 1).addChild(new GNodeConcrete(name));
-            }
+            int indentLevel = matchLevel(indentPrefix2Level, indent);
+            GNodeConcrete node = new GNodeConcrete(name);
+            currentNodesAtLevels.put(indentLevel, node);
 
-            prevLevel = identLevel;
+            if (indentLevel > ROOT_LEVEL)
+                currentNodesAtLevels.get(indentLevel - 1).addChild(node);
         }
 
         return currentNodesAtLevels.getOrDefault(ROOT_LEVEL, null);
@@ -52,27 +49,27 @@ public class GNodeFactory {
     }
 
     private static Pair<String, String> parseIdentAndName(String line) {
-        String ident = getIdentPrefix(line);
-        return ident != null
-                ? ImmutablePair.of(ident, line.substring(ident.length()).trim())
+        String indent = getIdentPrefix(line);
+        return indent != null
+                ? ImmutablePair.of(indent, line.substring(indent.length()).trim())
                 : /* blank line */ null;
     }
 
-    private static int matchLevel(Map<String, Integer> identPrefix2Level, String identPrefix) {
-        identPrefix2Level.putIfAbsent(identPrefix, calcLevel(identPrefix2Level, identPrefix));
+    private static int matchLevel(Map<String, Integer> indentPrefix2Level, String indentPrefix) {
+        indentPrefix2Level.putIfAbsent(indentPrefix, calcLevel(indentPrefix2Level, indentPrefix));
 
-        return identPrefix2Level.get(identPrefix);
+        return indentPrefix2Level.get(indentPrefix);
     }
 
-    private static Integer calcLevel(Map<String, Integer> identPrefix2Level, String identPrefix) {
-        int maxLessLevel = ROOT_LEVEL - 1;
-        for (Map.Entry<String, Integer> kv : identPrefix2Level.entrySet()) {
-            if (kv.getKey().length() == identPrefix.length())
+    private static Integer calcLevel(Map<String, Integer> indentPrefix2Level, String indentPrefix) {
+        int closestLessLevel = ROOT_LEVEL - 1;
+        for (Map.Entry<String, Integer> kv : indentPrefix2Level.entrySet()) {
+            if (kv.getKey().length() == indentPrefix.length())
                 return kv.getValue();
 
-            if (kv.getKey().length() < identPrefix.length())
-                maxLessLevel = Math.max(maxLessLevel, kv.getValue());
+            if (kv.getKey().length() < indentPrefix.length())
+                closestLessLevel = Math.max(closestLessLevel, kv.getValue());
         }
-        return maxLessLevel + 1;
+        return closestLessLevel + 1;
     }
 }
