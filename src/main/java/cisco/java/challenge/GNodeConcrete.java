@@ -1,12 +1,15 @@
 package cisco.java.challenge;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 class GNodeConcrete implements GNodeExt {
     private String name;
-    private GNode[] nodes;
+    private ArrayList<GNode> nodes;
 
     GNodeConcrete(String name, GNode ... nodes) {
         this.name = name;
-        this.nodes = nodes;
+        this.nodes = new ArrayList(Arrays.asList(nodes));
     }
 
     @Override
@@ -16,6 +19,10 @@ class GNodeConcrete implements GNodeExt {
 
     @Override
     public GNode[] getChildren() {
-        return nodes;
+        return nodes.toArray(new GNode[0]);
+    }
+
+    public void addChild(GNodeConcrete node) {
+        nodes.add(node);
     }
 }
