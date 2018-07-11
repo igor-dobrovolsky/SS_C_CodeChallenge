@@ -29,9 +29,9 @@ public class ChallengeSolverTest {
                 "  D");
         List<GNode> nodes = new ChallengeSolver().walkGraph(rootNode);
 
-        assertEquals(nodes.size(), expectedSet.size()); //make sure list and set are of the same size before comparing list as set
+        assertEquals(expectedSet.size(), nodes.size()); //make sure list and set are of the same size before comparing list as set
         Set<String> actualSet = nodes.stream().map(n -> n.getName()).collect(Collectors.toSet());
-        assertEquals(actualSet, expectedSet);
+        assertEquals(expectedSet, actualSet);
     }
 
     @Test(expected = NullPointerException.class)
@@ -63,7 +63,7 @@ public class ChallengeSolverTest {
 
         ArrayList<ArrayList<GNode>> paths = new ChallengeSolver().paths(rootNode);
 
-        assertEquals(paths.size(), expectedPaths.size()); //make sure list and set are of the same size before comparing list as set
+        assertEquals(expectedPaths.size(), paths.size()); //make sure list and set are of the same size before comparing list as set
         Set<List<String>> actualSet = paths.stream()
                 .map(
                         p -> p.stream()
@@ -71,6 +71,6 @@ public class ChallengeSolverTest {
                                 .collect(Collectors.toList()))
                 .collect(Collectors.toSet());
 
-        assertEquals(actualSet, expectedPaths);
+        assertEquals(expectedPaths, actualSet);
     }
 }
