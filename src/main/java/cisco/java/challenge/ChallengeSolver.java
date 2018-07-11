@@ -8,7 +8,32 @@ public class ChallengeSolver implements GraphWalker, GraphPathSupplier {
     @Override
     public ArrayList<ArrayList<GNode>> paths(GNode node) {
         Validate.notNull(node);
-        return null;
+
+        ArrayList<ArrayList<GNode>> paths = new ArrayList<>();
+
+        traversePaths(paths, node);
+
+        return paths;
+    }
+
+    private void traversePaths(ArrayList<ArrayList<GNode>> paths, GNode node) {
+        traversePaths(paths, node, new ArrayList<>());
+    }
+
+    private void traversePaths(ArrayList<ArrayList<GNode>> paths, GNode node,
+                               ArrayList<GNode> cPath) {
+
+        cPath = (ArrayList<GNode>)cPath.clone();
+        cPath.add(node);
+
+        if(node.getChildren().length == 0) { //leaf
+            paths.add(cPath);
+        }
+        else {
+            for (GNode cNode : node.getChildren()) {
+                traversePaths(paths, cNode, cPath);
+            }
+        }
     }
 
     @Override
